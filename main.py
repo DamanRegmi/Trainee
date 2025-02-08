@@ -50,20 +50,30 @@ async def delete_product(product_id:int):
     
 @app.put("/products/{product_id}")
 async def update_product(product_id:int,product_update: ProductUpdateRequest):
-        for i,product in enumerate(db):
-            if product.id==product_id:
-                updated_product=Product(
-                    id=product.id,
-                    name=product_update.name if product_update.name is not None else product.name,
-                    quantity=product_update.quantity if product_update.quantity is not None else product.quantity,
-                    price=product_update.price if product_update.price is not None else product.price,
-                    category=product_update.category if product_update.category is not None else product.category
-                )
-                db[i]=updated_product
-                return updated_product
-        raise HTTPException(
-        status_code=404,
-        detail=f"Product with id:{product_id} does not exists"
-    )   
+        conn = db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM products WHERE id=?",(product_id,))
+        product = cursor.fetchone()
+        if product is None: 
+            conn.close()   
+            raise HTTPException(
+            status_code=404,
+            detail=f"Product with id:{product_id} does not exists")       
+        updated_product={
+                    
+                    "name":product_update.name if product_update.name is not None else product["name"],
+                    "quantity":product_update.quantity if product_update.quantity is not None else product["quantity"],
+                    "price":product_update.price if product_update.price is not None else product["price"],
+                    "category":product_update.category if product_update.category is not None else product["category"]
+        }
+        
+        cursor.execute('''UPDATE products
+                    SET name=?,quantity=?,price=?,category=?
+                    WHERE id = ?''',(updated_product["name"],updated_product["quantity"],updated_product["price"],updated_product["category"],product_id))
+        
+        conn.commit()
+        conn.close()
+        return updated_product
+        
                   
                  

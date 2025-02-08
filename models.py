@@ -14,7 +14,7 @@ def init_db():
     cursor = conn.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS products (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id INTEGER PRIMARY KEY ,
             name TEXT NOT NULL,
             quantity INTEGER NOT NULL,
             price INTEGER NOT NULL,
@@ -26,7 +26,7 @@ def init_db():
     conn.close()
 
 class Product(BaseModel):
-    id: int
+    id:int
     name:str
     quantity:int
     price:int
