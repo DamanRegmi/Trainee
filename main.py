@@ -1,5 +1,5 @@
 from fastapi import FastAPI,HTTPException
-from typing import List
+
 from models import Product, ProductUpdateRequest, db_connection,init_db
 
 app=FastAPI()
