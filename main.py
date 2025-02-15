@@ -1,5 +1,5 @@
 from fastapi import FastAPI,HTTPException
-from typing import List
+
 from models import Product, ProductUpdateRequest, db_connection,init_db
 
 app=FastAPI()
@@ -17,7 +17,7 @@ async def get_products():
     cursor.execute("SELECT * FROM products")
     products = cursor.fetchall()
     conn.close()
-    return [dict(product) for product in products ]
+    return [dict(product) for product in products ] # List Comprehension
 
 @app.post("/products")
 async def new_product(product:Product):
@@ -31,7 +31,7 @@ async def new_product(product:Product):
     conn.commit()
     product_id=cursor.lastrowid
     conn.close()
-    return {"id":product.id}
+    return {"id":product_id}
 
 
 @app.delete("/products/{product_id}")
@@ -54,11 +54,14 @@ async def update_product(product_id:int,product_update: ProductUpdateRequest):
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM products WHERE id=?",(product_id,))
         product = cursor.fetchone()
+       
         if product is None: 
             conn.close()   
             raise HTTPException(
             status_code=404,
-            detail=f"Product with id:{product_id} does not exists")       
+            detail=f"Product with id:{product_id} does not exists") 
+            
+                
         updated_product={
                     
                     "name":product_update.name if product_update.name is not None else product["name"],
