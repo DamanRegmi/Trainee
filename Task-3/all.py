@@ -5,28 +5,51 @@ from pydantic import BaseModel
 from typing import Optional
 
 app = FastAPI()
-DB="fastapi.db"
+DB="loaded.db"
 csv_file="scrapped_products.csv"
 
-def load_csv_to_db():
-    df=pd.read_csv(csv_file)
-    
-    conn=sqlite3.connect(DB)
-    cursor=conn.cursor()
+def init_db():
+    conn = sqlite3.connect(DB)
+    cursor = conn.cursor()
     cursor.execute('''
-                   CREATE TABLE IF NOT EXISTS products(Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    Tag TEXT,Name TEXT,Oldprice INTEGER,Newprice INTEGER,
-                    Category TEXT,Imgurl TEXT)''')
-    df.to_sql('products',conn,if_exists='append',index=False)
+        CREATE TABLE IF NOT EXISTS products(
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Tag TEXT,
+            Name TEXT,
+            Oldprice INTEGER,
+            Newprice INTEGER,
+            Category TEXT,
+            Imgurl TEXT
+        )
+    ''')
     conn.commit()
     conn.close()
-    return {
-        "Message":"CSV data loaded into database"
-    }
     
-@app.post("/loadcsv")
-def  insert_csv():
-    return load_csv_to_db()
+init_db()
+    
+@app.post("/sendcsv")
+def send_csv_to_db():
+    try:
+        df = pd.read_csv(csv_file)
+        products = df.to_dict(orient="records")
+
+        conn = sqlite3.connect(DB)
+        cursor = conn.cursor()
+        
+        for product in products:
+            cursor.execute('''
+                INSERT INTO products (Tag, Name, Oldprice, Newprice, Category, Imgurl)
+                VALUES (?, ?, ?, ?, ?, ?)''',
+                (product["Tag"], product["Name"], product["Oldprice"], 
+                 product["Newprice"], product["Category"], product["Imgurl"])
+            )
+
+        conn.commit()
+        conn.close()
+        return {"message": "CSV data inserted successfully!"}
+    except:
+        raise HTTPException(status_code=500, detail="Error")
+
 
 @app.get("/products/all")
 def get_all_products():

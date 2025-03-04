@@ -1,24 +1,24 @@
 ---
-marp: true
-theme: uncover
+marp: false
+# theme: uncover 
 class : invert
 
 ---
 
 # <!--fit-->Data Engineering
-# **By : Daman Regmi**
+## **By : Daman Regmi**
 
 ---
 # What is Data Engineering?
 
-* Data engineering involves the processes and techniques used to prepare data for analytical or operational purposes.
-* Data engineers build and maintain the infrastructure that allows data to flow seamlessly through systems, ensuring that it is clean, organized, and available for end-users.
+- Data engineering involves the processes and techniques used to prepare data for analytical or operational purposes.
+- Data engineers build and maintain ~~the infrastructure~~ data pipeline that allows data to flow seamlessly through systems, ensuring that it is clean, organized, and available for end-users.
 
 ---
 # Key Responsibilities
 
 - Design and implement data pipelines for efficient data flow.
-- Develop and maintain databases and data warehouses.
+- Develop and maintain databases and data warehouses. (OLAP & OLTP)
 - Ensure data quality and integrity through validation and cleansing processes.
 
 ---
@@ -37,6 +37,11 @@ A data pipeline is a series of data processing steps that involve the collection
 # Data Pipeline Architecture
 - **Data Storage**: Systems like data lakes and warehouses that store processed data.
 - **Data Access**: Tools and interfaces that allow users to query and analyze data.
+
+---
+
+Data Lake --> Unstructure/ files & photos / Data Scientist
+Data Warehouse --> Strcuture / analytics BI Dashboard
 
 ---
 # Data Pipeline Architecture

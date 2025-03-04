@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import Optional
 import sqlite3
 
-DATABASE= "inventory.db"
+DATABASE= "inventory_new.db"
 
 def db_connection():
     conn = sqlite3.connect(DATABASE)    

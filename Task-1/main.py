@@ -31,7 +31,7 @@ async def new_product(product:Product):
     conn.commit()
     product_id=cursor.lastrowid
     conn.close()
-    return {"id":product_id}
+    return {"id": product_id}
 
 
 @app.delete("/products/{product_id}")

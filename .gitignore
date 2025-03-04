@@ -1,9 +1,17 @@
-scrapped.db
-fastapi.db
-try.ipynb
-read.ipynb
-scrap.ipynb
-items.csv
-notes.ipynb
-scrapped_products.csv
+# scrapped.db
+# fastapi.db
+# try.ipynb
+# read.ipynb
+# scrap.ipynb
+# items.csv
+# notes.ipynb
+# scrapped_products.csv
+# *.db
+
+classwork/*
+Task-1/*.db
+Task-2/*.db
+Task-3/*.db
+
+
 
